@@ -32,6 +32,9 @@ export interface jobModel{
     company_id : number;
     brochure : string | undefined;
     jobDescription : string | undefined;
+    requiredSkills?: string[];
+    preferredSkills?: string[];
+    minimumExperienceYears?: number | null;
 }
 
 
@@ -53,6 +56,30 @@ export interface applicationModel{
   status: string;
   email: string;
   resume: string;
+  matchScore?: number | null;
+  scoreBreakdown?: MatchScoreBreakdown;
+  scoringStatus?: string;
+  scoredAt?: string | null;
+  scoringVersion?: string | null;
+}
+
+export interface MatchScoreComponent {
+  ratio: number;
+  points: number;
+  maximum: number;
+  matched?: string[];
+  missing?: string[];
+  matched_terms?: string[];
+  missing_terms?: string[];
+  reason?: string;
+}
+
+export interface MatchScoreBreakdown {
+  version?: string;
+  total?: number;
+  available_weight?: number;
+  excluded_components?: string[];
+  components?: Record<string, MatchScoreComponent>;
 }
 
 
@@ -84,6 +111,4 @@ export interface ApplicationsListProps{
   statuses: string[];
   applications: applicationModel[];
 };
-
-
 

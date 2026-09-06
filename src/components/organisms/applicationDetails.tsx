@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../../context/userContext";
-import { applicationDetailsProps } from "../../interfaces/appInterface";
+import {
+  applicationDetailsProps,
+  MatchScoreBreakdown,
+} from "../../interfaces/appInterface";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import CandidateMatchScore from "../molecules/candidateMatchScore";
 
 const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
 
@@ -16,6 +20,11 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
   const [email, setEmail] = useState("");
   const [resume, setResume] = useState<string | null>(null);
   const [userId, setUserId] = useState<number>(-1);
+  const [matchScore, setMatchScore] = useState<number | null>(null);
+  const [scoreBreakdown, setScoreBreakdown] = useState<MatchScoreBreakdown | null>(null);
+  const [scoringStatus, setScoringStatus] = useState("pending");
+  const [scoredAt, setScoredAt] = useState<string | null>(null);
+  const [scoringVersion, setScoringVersion] = useState<string | null>(null);
   const hostParts = window.location.hostname.split('.');
   let subdomain: string | null = null;
 
@@ -106,6 +115,11 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
         setEmail(appData.email);
         setResume(appData.resume);
         setUserId(appData.user_id);
+        setMatchScore(appData.match_score == null ? null : Number(appData.match_score));
+        setScoreBreakdown(appData.score_breakdown || null);
+        setScoringStatus(appData.scoring_status || "pending");
+        setScoredAt(appData.scored_at || null);
+        setScoringVersion(appData.scoring_version || null);
       } 
       catch (e) {
         toast.success("Error fetching application details");
@@ -143,6 +157,14 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
               View Resume
             </a>
           )}
+
+          <CandidateMatchScore
+            score={matchScore}
+            status={scoringStatus}
+            breakdown={scoreBreakdown}
+            scoredAt={scoredAt}
+            version={scoringVersion}
+          />
 
             {
               (user?.role == "admin" || user?.role == "user_manager") ? 

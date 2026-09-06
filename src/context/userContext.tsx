@@ -26,47 +26,46 @@ const UserProvider = ({ children }: userProviderProps) => {
   const [user, setUser] = useState<userModel | null>(null);
 
   useEffect(() => {
-    function fetchUser() {
+    async function fetchUser() {
       const jwtToken = Cookies.get('jwtToken');
+
       if (!jwtToken) {
-        alert('Authorization token missing');
+        setUser(null);
         return;
       }
-      const hostParts = window.location.hostname.split('.');
-      let subdomain: number | null = null;
-      if (hostParts.length > 2) {
-        const sub = parseInt(hostParts[0], 10);
-        if (!isNaN(sub)) subdomain = sub;
-      }
-      axios.get(`http://lvh.me:3001/api/v1/me`, {
+
+      try {
+        const res = await axios.get(`http://lvh.me:3001/api/v1/me`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `${jwtToken}`,
           },
-        })
-        .then((res) => {
-          const attrs = res.data.data.attributes;
+        });
+        const attrs = res.data.data.attributes;
         const userData: userModel = {
-            id: Number(attrs.id),
-            name: attrs.name,
-            role: attrs.role,
-            email: attrs.email,
-            bio: attrs.bio,
-            location: attrs.location
+          id: Number(attrs.id),
+          name: attrs.name,
+          role: attrs.role,
+          email: attrs.email,
+          bio: attrs.bio,
+          location: attrs.location
         };
 
-        console.log("hello");
-        console.log(userData);
         setUser(userData);
-        })
-        .catch((err) => {
+      } catch (err) {
+        if (axios.isAxiosError(err) && err.response?.status === 401) {
+          Cookies.remove('jwtToken', { path: '/', domain: 'lvh.me' });
+          Cookies.remove('jwtToken', { path: '/' });
+        } else {
           console.error("Error fetching user:", err);
-          setUser(null);
-        });
+        }
+
+        setUser(null);
+      }
     }
 
     fetchUser();
-  }, [window.location.hostname.split('.')[0]]);
+  }, []);
 
   return (
     <userContext.Provider value={{ user, setUser }}>

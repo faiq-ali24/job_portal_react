@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 const GuestNav = () => {
   const navigate = useNavigate();
   const token = Cookies.get("jwtToken");
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const hostParts = window.location.hostname.split(".");
   let subdomain: number | null = null;
   if (hostParts.length > 2) {
@@ -16,8 +16,10 @@ const GuestNav = () => {
     if (!isNaN(sub)) subdomain = sub;
   }
   const handleLogout = () => {
-    Cookies.remove("jwtToken", { path: "/", domain: ".lvh.me" });
-    window.location.href = `http://lvh.me:3000/login`;
+    setUser(null);
+    Cookies.remove("jwtToken", { path: "/", domain: "lvh.me" });
+    Cookies.remove("jwtToken", { path: "/" });
+    window.location.replace("http://lvh.me:3000/login");
   };
 
   return (

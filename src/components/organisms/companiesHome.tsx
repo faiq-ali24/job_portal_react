@@ -38,7 +38,12 @@ const JobsHome = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const query = `q[title_cont]=${title}&q[salary_gt]=${salary}&q[location_cont]=${location}`;
+        const query = new URLSearchParams({ page: String(page) });
+
+        if (title.trim()) query.set("search", title.trim());
+        if (salary > 0) query.set("q[salary_gteq]", String(salary));
+        if (location) query.set("q[location_eq]", location);
+
         const jwtToken = Cookies.get("jwtToken");
 
         if (!jwtToken) {
@@ -47,7 +52,7 @@ const JobsHome = () => {
         }
 
         const response = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs?page=${page}&${query}`,
+          `http://${subdomain}.lvh.me:3001/api/v1/jobs?${query.toString()}`,
           {
             headers: {
               "Content-Type": "application/json; charset=UTF-8",

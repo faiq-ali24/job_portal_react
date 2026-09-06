@@ -23,6 +23,9 @@ const JobDetails = ({id}: jobDetailsProps) => {
   const [salary, setSalary] = useState(0)
   const [description, setDescription] = useState("")
   const [jobDescription, setJobDescription] = useState("")
+  const [requiredSkills, setRequiredSkills] = useState<string[]>([])
+  const [preferredSkills, setPreferredSkills] = useState<string[]>([])
+  const [minimumExperienceYears, setMinimumExperienceYears] = useState<number | null>(null)
   const [brochure, setBrochure] = useState<string | null>(null)
   const navigate = useNavigate();
   const hostParts = window.location.hostname.split('.');
@@ -78,6 +81,9 @@ const JobDetails = ({id}: jobDetailsProps) => {
         setSalary(jobData.data.attributes.salary);
         setLocation(jobData.data.attributes.location);
         setJobDescription(jobData.data.attributes.job_description);
+        setRequiredSkills(jobData.data.attributes.required_skills || []);
+        setPreferredSkills(jobData.data.attributes.preferred_skills || []);
+        setMinimumExperienceYears(jobData.data.attributes.minimum_experience_years ?? null);
         setBrochure(jobData.data.attributes.brochure);
         setCompanyId(jobData.data.attributes.company_id)
         
@@ -126,6 +132,20 @@ const JobDetails = ({id}: jobDetailsProps) => {
               </p>
               <p className="mb-2">
                 <strong className="text-dark">Job Details:</strong> {jobDescription}
+              </p>
+              <p className="mb-2">
+                <strong className="text-dark">Required Skills:</strong>{" "}
+                {requiredSkills.length > 0 ? requiredSkills.join(", ") : "Not specified"}
+              </p>
+              <p className="mb-2">
+                <strong className="text-dark">Preferred Skills:</strong>{" "}
+                {preferredSkills.length > 0 ? preferredSkills.join(", ") : "Not specified"}
+              </p>
+              <p className="mb-2">
+                <strong className="text-dark">Minimum Experience:</strong>{" "}
+                {minimumExperienceYears == null
+                  ? "Not specified"
+                  : `${minimumExperienceYears} years`}
               </p>
 
               {brochure && (

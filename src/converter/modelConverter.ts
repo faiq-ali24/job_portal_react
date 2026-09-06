@@ -1,4 +1,4 @@
-import { applicationModel } from "../interfaces/appInterface";
+import { applicationModel, MatchScoreBreakdown } from "../interfaces/appInterface";
 
 import { jobModel } from "../interfaces/appInterface";
 
@@ -16,6 +16,11 @@ interface ApplicationApiResponse {
     status: string;
     email: string;
     resume: string;
+    match_score?: number | string | null;
+    score_breakdown?: MatchScoreBreakdown;
+    scoring_status?: string;
+    scored_at?: string | null;
+    scoring_version?: string | null;
   };
 }
 
@@ -30,6 +35,13 @@ export function convertApplicationData(apiData: ApplicationApiResponse): applica
     status: apiData.attributes.status,
     email: apiData.attributes.email,
     resume: apiData.attributes.resume,
+    matchScore: apiData.attributes.match_score == null
+      ? null
+      : Number(apiData.attributes.match_score),
+    scoreBreakdown: apiData.attributes.score_breakdown,
+    scoringStatus: apiData.attributes.scoring_status,
+    scoredAt: apiData.attributes.scored_at,
+    scoringVersion: apiData.attributes.scoring_version,
   };
 }
 
@@ -132,6 +144,9 @@ interface JobApiResponse {
     company_id: number;
     brochure?: string;
     job_description?: string;
+    required_skills?: string[];
+    preferred_skills?: string[];
+    minimum_experience_years?: number | null;
   };
 }
 
@@ -145,6 +160,9 @@ export function convertJob(apiData: JobApiResponse): jobModel {
     company_id: apiData.attributes.company_id,
     brochure: apiData.attributes.brochure,
     jobDescription: apiData.attributes.job_description,
+    requiredSkills: apiData.attributes.required_skills ?? [],
+    preferredSkills: apiData.attributes.preferred_skills ?? [],
+    minimumExperienceYears: apiData.attributes.minimum_experience_years ?? null,
   };
 }
 

@@ -13,6 +13,9 @@ const JobForm = ({id} : jobFormProps) => {
   const [description, setDescription] = useState("");
   const [salary, setSalary] = useState("");
   const [location, setLocation] = useState("");
+  const [requiredSkills, setRequiredSkills] = useState("");
+  const [preferredSkills, setPreferredSkills] = useState("");
+  const [minimumExperienceYears, setMinimumExperienceYears] = useState("");
   const [brochure, setBrochure] = useState<File | null>(null);
   const [jobDoc, setJobDoc] = useState<File | null>(null);
   const {user} = useUser();
@@ -52,6 +55,9 @@ const JobForm = ({id} : jobFormProps) => {
         setDescription(job.description || "");
         setSalary(job.salary?.toString() || "");
         setLocation(job.location || "");
+        setRequiredSkills((job.required_skills || []).join(", "));
+        setPreferredSkills((job.preferred_skills || []).join(", "));
+        setMinimumExperienceYears(job.minimum_experience_years?.toString() || "");
       } 
       catch (e) {
         console.error("Error fetching job");
@@ -75,6 +81,17 @@ const JobForm = ({id} : jobFormProps) => {
     formData.append("job[description]", description);
     formData.append("job[salary]", salary);
     formData.append("job[location]", location);
+    requiredSkills
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean)
+      .forEach((skill) => formData.append("job[required_skills][]", skill));
+    preferredSkills
+      .split(",")
+      .map((skill) => skill.trim())
+      .filter(Boolean)
+      .forEach((skill) => formData.append("job[preferred_skills][]", skill));
+    formData.append("job[minimum_experience_years]", minimumExperienceYears);
     if (brochure){
       formData.append("job[document]", brochure);
     } 
@@ -159,6 +176,43 @@ const JobForm = ({id} : jobFormProps) => {
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 required
+              />
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Required Skills</label>
+              <input
+                type="text"
+                className="form-control"
+                value={requiredSkills}
+                onChange={(e) => setRequiredSkills(e.target.value)}
+                placeholder="Ruby, Rails, PostgreSQL"
+                required
+              />
+              <div className="form-text">Separate skills with commas.</div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Preferred Skills</label>
+              <input
+                type="text"
+                className="form-control"
+                value={preferredSkills}
+                onChange={(e) => setPreferredSkills(e.target.value)}
+                placeholder="Redis, Sidekiq"
+              />
+              <div className="form-text">Separate skills with commas.</div>
+            </div>
+
+            <div className="mb-3">
+              <label className="form-label">Minimum Experience (years)</label>
+              <input
+                type="number"
+                className="form-control"
+                value={minimumExperienceYears}
+                onChange={(e) => setMinimumExperienceYears(e.target.value)}
+                min="0"
+                step="0.5"
               />
             </div>
 
