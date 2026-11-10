@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { User, convertUsersList } from "../../converter/modelConverter";
+import { apiBase } from "../../config";
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -15,7 +16,7 @@ const UserList = () => {
           return;
         }
 
-        const res = await axios.get("http://admin.lvh.me:3001/api/v1/users/get_all", {
+        const res = await axios.get(`${apiBase("admin")}/api/v1/users/get_all`, {
           headers: { Authorization: `${jwtToken}` },
         });
 
@@ -37,7 +38,7 @@ const UserList = () => {
         return;
       }
 
-      await axios.delete(`http://admin.lvh.me:3001/api/v1/users/${id}`, {
+      await axios.delete(`${apiBase("admin")}/api/v1/users/${id}`, {
         headers: { Authorization: `${jwtToken}` },
       });
 

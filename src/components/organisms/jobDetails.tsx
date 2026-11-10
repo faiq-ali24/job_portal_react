@@ -6,6 +6,7 @@ import { jobDetailsProps } from "../../interfaces/appInterface";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { apiBase } from "../../config";
 
 
 
@@ -43,7 +44,7 @@ const JobDetails = ({id}: jobDetailsProps) => {
           alert("Authroization token missing.")
           return;
         }
-        const res = axios.delete(`http://${subdomain}.lvh.me:3001/api/v1/jobs/${id}`,{
+        const res = axios.delete(`${apiBase(subdomain)}/api/v1/jobs/${id}`,{
           headers: {
             Authorization: `${jwtToken}`
           }
@@ -67,7 +68,7 @@ const JobDetails = ({id}: jobDetailsProps) => {
             return;
         }
         
-        const jobRes = await axios.get(`http://${subdomain}.lvh.me:3001/api/v1/jobs/${id}`, {
+        const jobRes = await axios.get(`${apiBase(subdomain)}/api/v1/jobs/${id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `${jwtToken}`
@@ -88,7 +89,7 @@ const JobDetails = ({id}: jobDetailsProps) => {
         setCompanyId(jobData.data.attributes.company_id)
         
         const companyRes = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/show/${jobData.data.attributes.company_id}`,
+          `${apiBase(subdomain)}/api/v1/show/${jobData.data.attributes.company_id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -150,7 +151,7 @@ const JobDetails = ({id}: jobDetailsProps) => {
 
               {brochure && (
                 <a
-                  href={`http://${subdomain}.lvh.me:3001${brochure}`}
+                  href={`${apiBase(subdomain)}${brochure}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn btn-outline-primary mt-3"

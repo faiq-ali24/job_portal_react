@@ -1,4 +1,5 @@
 import React from "react";
+import { appBase } from "../../config";
 
 interface CompanyCardProps {
   id: number;
@@ -8,7 +9,7 @@ interface CompanyCardProps {
 
 const CompanyCard = ({ id, email , name} : CompanyCardProps) => {
   const handleRedirect = () => {
-    window.location.href = `http://${id}.lvh.me:3000/jobs`;
+    window.location.href = `${appBase(id)}/jobs`;
   };
 
   return (

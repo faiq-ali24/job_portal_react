@@ -6,6 +6,7 @@ import { UserSignup } from '../../interfaces/appInterface';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
+import { BASE_DOMAIN, SECURE_COOKIES, apiBase, appBase } from "../../config";
 
 
 
@@ -27,7 +28,7 @@ const Signup = () => {
 
     try{
       const response = await axios.post(
-        'http://lvh.me:3001/signup',
+        `${apiBase()}/signup`,
         {user: data}
       );
       console.log("Full response:", response);
@@ -37,19 +38,19 @@ const Signup = () => {
       
       if(token){
         Cookies.set("jwtToken", token, {
-                  domain: "lvh.me", 
+                  domain: BASE_DOMAIN, 
                   sameSite: "Lax", 
-                  secure: false,
+                  secure: SECURE_COOKIES,
                 });
                 
         const user = response.data.data.id;
         const role = response.data.data.role
         if (role === "company") {
           const subdomain = user;
-          window.location.href = `http://${subdomain}.lvh.me:3000/home`;
+          window.location.href = `${appBase(subdomain)}/home`;
         }
         else if(role === "candidate"){
-          window.location.href = `http://lvh.me:3000/home`;
+          window.location.href = `${appBase()}/home`;
         }
       }
     }

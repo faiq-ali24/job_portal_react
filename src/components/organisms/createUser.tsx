@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useUser } from '../../context/userContext';
 import Cookies from 'js-cookie';
+import { apiBase } from "../../config";
 
 interface CreateUser {
   name: string;
@@ -29,7 +30,7 @@ const CreateUser = () => {
     try {
       const token = Cookies.get("jwtToken");
       const response = await axios.post(
-        `http://lvh.me:3001/signup`,
+        `${apiBase()}/signup`,
         { user: data },
         { headers: {Authorization: `${token}` } }
       );

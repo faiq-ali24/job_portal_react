@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { userProfile } from "../../interfaces/appInterface";
 import { useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
+import { apiBase } from "../../config";
 
 const Profile = () => {
   const [_user, setUser] = useState<userProfile | null>(null);
@@ -24,7 +25,7 @@ const Profile = () => {
           alert("Authorization token missing");
           return;
         }
-        const res = await axios.get(`http://${subdomain}.lvh.me:3001/api/v1/me`, {
+        const res = await axios.get(`${apiBase(subdomain)}/api/v1/me`, {
           headers: { Authorization: `${jwtToken}` },
         });
         const data = res.data.data.attributes;
@@ -60,7 +61,7 @@ const Profile = () => {
           <img
             src={
               _user.picture
-                ? `http://${subdomain}.lvh.me:3001${_user.picture}`
+                ? `${apiBase(subdomain)}${_user.picture}`
                 : "./job-search.png"
             }
             alt="Profile"

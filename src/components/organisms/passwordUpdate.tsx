@@ -3,6 +3,7 @@ import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { BASE_DOMAIN, apiBase, appBase } from "../../config";
 
 const PasswordUpdate = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -22,7 +23,7 @@ const PasswordUpdate = () => {
 
     try {
       const res = await axios.patch(
-        "http://lvh.me:3001/signup",
+        `${apiBase()}/signup`,
         {
           user: {
             current_password: currentPassword,
@@ -36,8 +37,8 @@ const PasswordUpdate = () => {
           },
         }
       );
-      Cookies.remove("jwtToken", { path: "/", domain: ".lvh.me" });
-      window.location.href = `http://lvh.me:3000/login`;
+      Cookies.remove("jwtToken", { path: "/", domain: BASE_DOMAIN });
+      window.location.href = `${appBase()}/login`;
       toast.success("Password updated successfully!");
       navigate("/login");
     } 

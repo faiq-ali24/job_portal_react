@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import CandidateMatchScore from "../molecules/candidateMatchScore";
+import { apiBase } from "../../config";
 
 const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
 
@@ -50,7 +51,7 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
         alert("Authorization token missing");
         return;
       }
-      const res = axios.patch(`http://${subdomain}.lvh.me:3001/api/v1/jobs/${jobId}/applications/${id}/change_status`,
+      const res = axios.patch(`${apiBase(subdomain)}/api/v1/jobs/${jobId}/applications/${id}/change_status`,
       {
         "status" : `${newStatus}`
       },
@@ -74,7 +75,7 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
           alert("Authorization token missing");
           return;
         }
-        const res = axios.delete(`http://${subdomain}.lvh.me:3001/api/v1/applications/${id}`,
+        const res = axios.delete(`${apiBase(subdomain)}/api/v1/applications/${id}`,
         {
           headers: {
              Authorization: `${jwtToken}`
@@ -98,7 +99,7 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
         }
 
         const appRes = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs/${jobId}/applications/${id}`,
+          `${apiBase(subdomain)}/api/v1/jobs/${jobId}/applications/${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -149,7 +150,7 @@ const ApplicationDetails = ({ jobId, id }: applicationDetailsProps) => {
 
           {resume && (
             <a
-              href={`http://${subdomain}.lvh.me:3001${resume}`}
+              href={`${apiBase(subdomain)}${resume}`}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-outline-primary mt-3"

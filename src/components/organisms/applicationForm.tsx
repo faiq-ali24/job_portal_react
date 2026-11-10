@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { userContext, useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
+import { apiBase } from "../../config";
 
 
 export interface applicationFormProps{
@@ -42,7 +43,7 @@ const ApplicationForm = ({job_id} : applicationFormProps) => {
 
         try {
             const res = await axios.post(
-            `http://${subdomain}.lvh.me:3001/api/v1/jobs/${job_id}/applications`,
+            `${apiBase(subdomain)}/api/v1/jobs/${job_id}/applications`,
             formData,
             {
             headers: {

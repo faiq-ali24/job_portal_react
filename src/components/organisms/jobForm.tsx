@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
+import { apiBase } from "../../config";
 
 
 
@@ -40,7 +41,7 @@ const JobForm = ({id} : jobFormProps) => {
         }
 
         const res = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs/${id}`,
+          `${apiBase(subdomain)}/api/v1/jobs/${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -99,7 +100,7 @@ const JobForm = ({id} : jobFormProps) => {
     try {
       if(id == null){
           const res = await axios.post(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs`,
+          `${apiBase(subdomain)}/api/v1/jobs`,
           formData,
           {
             headers: {
@@ -113,7 +114,7 @@ const JobForm = ({id} : jobFormProps) => {
       }
       else{
         const res = await axios.put(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs/${id}`,
+          `${apiBase(subdomain)}/api/v1/jobs/${id}`,
           formData,
           {
             headers: {

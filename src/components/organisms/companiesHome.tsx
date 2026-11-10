@@ -9,6 +9,7 @@ import { useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
 import { jobModel } from "../../interfaces/appInterface";
 import { convertJobsList } from "../../converter/modelConverter"; // adjust path
+import { apiBase } from "../../config";
 
 export const cities: string[] = ["Lahore", "Karachi", "Islamabad", "Multan", "Faisalabad", "Queta"];
 export const salaries: number[] = [100000, 300000, 500000];
@@ -52,7 +53,7 @@ const JobsHome = () => {
         }
 
         const response = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/jobs?${query.toString()}`,
+          `${apiBase(subdomain)}/api/v1/jobs?${query.toString()}`,
           {
             headers: {
               "Content-Type": "application/json; charset=UTF-8",
@@ -128,3 +129,4 @@ const JobsHome = () => {
 };
 
 export default JobsHome;
+

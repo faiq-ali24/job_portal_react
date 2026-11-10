@@ -4,6 +4,7 @@ import axios from "axios";
 import { userProfile } from "../interfaces/appInterface";
 import { useUser } from "../context/userContext";
 import Cookies from "js-cookie";
+import { BASE_DOMAIN, appBase } from "../config";
 
 const GuestNav = () => {
   const navigate = useNavigate();
@@ -17,9 +18,9 @@ const GuestNav = () => {
   }
   const handleLogout = () => {
     setUser(null);
-    Cookies.remove("jwtToken", { path: "/", domain: "lvh.me" });
+    Cookies.remove("jwtToken", { path: "/", domain: BASE_DOMAIN });
     Cookies.remove("jwtToken", { path: "/" });
-    window.location.replace("http://lvh.me:3000/login");
+    window.location.replace(`${appBase()}/login`);
   };
 
   return (
@@ -48,7 +49,7 @@ const GuestNav = () => {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    window.location.href = `http://lvh.me:3000/home`;
+                    window.location.href = `${appBase()}/home`;
                   }}
                 >
                   Home
@@ -59,7 +60,7 @@ const GuestNav = () => {
                   href="#"
                   onClick={(e) => {
                     e.preventDefault();
-                    window.location.href = `http://lvh.me:3000/home`;
+                    window.location.href = `${appBase()}/home`;
                   }}
                 >
                   Home
@@ -90,9 +91,9 @@ const GuestNav = () => {
                         if(user?.role === "candidate")
                           navigate("/jobs");
                         else if(user?.role === "company")
-                          window.location.href = `http://${user?.id}.lvh.me:3000/jobs`;
+                          window.location.href = `${appBase(user?.id)}/jobs`;
                         else
-                          window.location.href = `http://admin.lvh.me:3000/jobs`;
+                          window.location.href = `${appBase("admin")}/jobs`;
                       }}
                     >
                       Jobs
@@ -106,9 +107,9 @@ const GuestNav = () => {
                         if(user?.role === "candidate")
                           navigate("/all_applications");
                         else if(user?.role === "company")
-                          window.location.href = `http://${user?.id}.lvh.me:3000/all_applications`;
+                          window.location.href = `${appBase(user?.id)}/all_applications`;
                         else 
-                          window.location.href = `http://admin.lvh.me:3000/all_applications`;
+                          window.location.href = `${appBase("admin")}/all_applications`;
                       }}
                     >
                       Applications
@@ -122,7 +123,7 @@ const GuestNav = () => {
                         href="#"
                         onClick={(e) => {
                           e.preventDefault();
-                          window.location.href = `http://admin.lvh.me:3000/create_user`;
+                          window.location.href = `${appBase("admin")}/create_user`;
                         }}
                       >
                         Create user
@@ -139,7 +140,7 @@ const GuestNav = () => {
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        window.location.href = `http://admin.lvh.me:3000/users`;
+                        window.location.href = `${appBase("admin")}/users`;
                       }}
                     >
                       Users
@@ -171,9 +172,9 @@ const GuestNav = () => {
                             if(user?.role === "candidate")
                               navigate("/profile");
                             else if(user?.role === "company")
-                              window.location.href = `http://${user?.id}.lvh.me:3000/profile`;
+                              window.location.href = `${appBase(user?.id)}/profile`;
                             else 
-                              window.location.href = `http://admin.lvh.me:3000/profile`;
+                              window.location.href = `${appBase("admin")}/profile`;
                           }}
                         >
                           My Profile
@@ -188,9 +189,9 @@ const GuestNav = () => {
                         if(user?.role === "candidate")
                           navigate("/change_password");
                         else if(user?.role === "company")
-                          window.location.href = `http://${user?.id}.lvh.me:3000/change_password`;
+                          window.location.href = `${appBase(user?.id)}/change_password`;
                         else 
-                          window.location.href = `http://admin.lvh.me:3000/change_password`;
+                          window.location.href = `${appBase("admin")}/change_password`;
                       }}
                     >
                       Change Password

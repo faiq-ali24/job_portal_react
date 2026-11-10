@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
 import { convertApplicationsList } from "../../converter/modelConverter";
+import { apiBase } from "../../config";
 
 
 
@@ -41,7 +42,7 @@ const AllApplications = () => {
         }
 
         const response = await axios.get(
-          `http://${subdomain}.lvh.me:3001/api/v1/applications/get_all?${query}`,
+          `${apiBase(subdomain)}/api/v1/applications/get_all?${query}`,
           {
             headers: {
               "Content-Type": "application/json; charset=UTF-8",

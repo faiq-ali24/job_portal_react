@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState, useEffect, createContext, ReactNode, useContext } from 'react';
+import { BASE_DOMAIN, apiBase } from "../config";
 
 export interface userModel {
   id: number;
@@ -35,7 +36,7 @@ const UserProvider = ({ children }: userProviderProps) => {
       }
 
       try {
-        const res = await axios.get(`http://lvh.me:3001/api/v1/me`, {
+        const res = await axios.get(`${apiBase()}/api/v1/me`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `${jwtToken}`,
@@ -54,7 +55,7 @@ const UserProvider = ({ children }: userProviderProps) => {
         setUser(userData);
       } catch (err) {
         if (axios.isAxiosError(err) && err.response?.status === 401) {
-          Cookies.remove('jwtToken', { path: '/', domain: 'lvh.me' });
+          Cookies.remove('jwtToken', { path: '/', domain: BASE_DOMAIN });
           Cookies.remove('jwtToken', { path: '/' });
         } else {
           console.error("Error fetching user:", err);

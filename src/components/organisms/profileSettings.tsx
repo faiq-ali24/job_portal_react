@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useUser } from "../../context/userContext";
 import Cookies from "js-cookie";
+import { apiBase } from "../../config";
 
 const ProfileSettings = () => {
   const [name, setName] = useState("");
@@ -28,7 +29,7 @@ const ProfileSettings = () => {
           return;
         }
 
-        const res = await axios.get(`http://${subdomain}.lvh.me:3001/api/v1/me`, {
+        const res = await axios.get(`${apiBase(subdomain)}/api/v1/me`, {
           headers: {
             Authorization: `${jwtToken}`,
           },
@@ -65,7 +66,7 @@ const ProfileSettings = () => {
         formData.append("user[picture]", picture);
       }
 
-      await axios.patch("http://lvh.me:3001/signup", formData, {
+      await axios.patch(`${apiBase()}/signup`, formData, {
         headers: {
           Authorization: `${jwtToken}`,
           "Content-Type": "multipart/form-data",

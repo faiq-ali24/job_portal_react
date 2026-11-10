@@ -9,6 +9,7 @@ import {
   convertApplication,
   convertCompaniesList,
 } from "../../converter/modelConverter";
+import { apiBase } from "../../config";
 
 const CandidatesHome = () => {
   const [applications, setApplications] = useState<Application[]>([]);
@@ -24,7 +25,7 @@ const CandidatesHome = () => {
         }
 
         const appsRes = await axios.get(
-          "http://lvh.me:3001/api/v1/applications/get_all",
+          `${apiBase()}/api/v1/applications/get_all`,
           {
             headers: { Authorization: `${jwtToken}` },
           }
@@ -32,7 +33,7 @@ const CandidatesHome = () => {
         setApplications(appsRes.data.data.map(convertApplication));
 
         const compRes = await axios.get(
-          "http://lvh.me:3001/api/v1/users/get_companies",
+          `${apiBase()}/api/v1/users/get_companies`,
           {
             headers: { Authorization: `${jwtToken}` },
           }

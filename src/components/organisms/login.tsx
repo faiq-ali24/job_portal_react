@@ -6,6 +6,7 @@ import { UserLogin } from '../../interfaces/appInterface';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from "js-cookie";
+import { BASE_DOMAIN, SECURE_COOKIES, apiBase, appBase } from "../../config";
 
 
 
@@ -27,7 +28,7 @@ const Login = () => {
 
     try{
       const response = await axios.post(
-        'http://lvh.me:3001/login',
+        `${apiBase()}/login`,
         {user: data}
       );
 
@@ -36,21 +37,21 @@ const Login = () => {
       if(token){
         
         Cookies.set("jwtToken", token, {
-          domain: "lvh.me", 
+          domain: BASE_DOMAIN, 
           sameSite: "Lax", 
-          secure: false,
+          secure: SECURE_COOKIES,
         });
         const user = response.data.status.data.user;
 
         if (user.role === "company") {
           const subdomain = user.id;
-          window.location.href = `http://${subdomain}.lvh.me:3000/home`;
+          window.location.href = `${appBase(subdomain)}/home`;
         }
         else if(user.role === "candidate"){
-          window.location.href = `http://lvh.me:3000/home`;
+          window.location.href = `${appBase()}/home`;
         }
         else 
-          window.location.href = `http://admin.lvh.me:3000/jobs`;
+          window.location.href = `${appBase("admin")}/jobs`;
       }
     }
     catch(e){
